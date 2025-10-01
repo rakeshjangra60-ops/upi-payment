@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>UPI Payment</title>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+</head>
+<body>
+  <h2>Pay via UPI</h2>
+  <p id="order-info"></p>
+  <canvas id="qr-code"></canvas><br/>
+  <a id="upi-btn" href="#" style="padding:10px 15px; background:#4CAF50; color:white; text-decoration:none; border-radius:6px;">Pay via UPI</a>
+  <br/><br/>
+  <a id="wa-btn" href="#" target="_blank" style="padding:10px 15px; background:#25D366; color:white; text-decoration:none; border-radius:6px;">Confirm on WhatsApp</a>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const order_id = urlParams.get('order_id');
+    const amount = urlParams.get('amount');
+
+    document.getElementById('order-info').innerText = `Order: ${order_id}, Amount: ₹${amount}`;
+
+    const upiId = "q558440005@ybl";
+    const upiName = "Rakesh";
+    const upiLink = `upi://pay?pa=${upiId}&pn=${upiName}&am=${amount}&cu=INR`;
+
+    document.getElementById('upi-btn').addEventListener('click', function(e){
+      e.preventDefault();
+      window.location.href = upiLink;
+    });
+
+    QRCode.toCanvas(document.getElementById('qr-code'), upiLink, { width: 200 }, function(err) {
+      if(err) console.error(err);
+    });
+
+    document.getElementById('wa-btn').href = `https://wa.me/917876838386?text=Hello I have paid for Order ${order_id}`;
+  </script>
+</body>
+</html>
